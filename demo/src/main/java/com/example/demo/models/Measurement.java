@@ -17,9 +17,9 @@ public class Measurement {
     @Basic
     @Column(name = "Tour")
     private Integer tour;
-    @Basic
-    @Column(name = "OrganizationId")
-    private Integer organizationId;
+    @ManyToOne
+    @JoinColumn(name = "OrganizationId", referencedColumnName = "id")
+    private Organization organizationId;
     @Basic
     @Column(name = "LineNo")
     private Integer lineNo;
@@ -50,9 +50,9 @@ public class Measurement {
     @Basic
     @Column(name = "ElementaryAreaArea")
     private Integer elementaryAreaArea;
-    @Basic
-    @Column(name = "AmeliorativeStateId")
-    private Integer ameliorativeStateId;
+    @ManyToOne
+    @JoinColumn(name = "AmeliorativeStateId", referencedColumnName = "id")
+    private AmeliorativeState ameliorativeStateId;
     @Basic
     @Column(name = "HumusHorizonThickness")
     private Integer humusHorizonThickness;
@@ -140,19 +140,19 @@ public class Measurement {
     @Basic
     @Column(name = "Radionuclides_Strontium")
     private Integer radionuclidesStrontium;
-    @Basic
-    @Column(name = "SoilTypeId")
-    private Integer soilTypeId;
-    @Basic
-    @Column(name = "SoilHydrationAndTurfId")
-    private Integer soilHydrationAndTurfId;
-    @Basic
-    @Column(name = "SoilGranulometricCompositionId")
-    private Integer soilGranulometricCompositionId;
-    @Basic
-    @Column(name = "SoilBedrockId")
-    private Integer soilBedrockId;
-    @Basic
-    @Column(name = "SoilParentrockId")
-    private Integer soilParentrockId;
+    @ManyToOne
+    @JoinColumn(name = "SoilTypeId", referencedColumnName = "id")
+    private SoilType soilTypeId;
+    @ManyToOne
+    @JoinColumn(name = "SoilHydrationAndTurfId", referencedColumnName = "id")
+    private SoilHydrationAndTurf soilHydrationAndTurfId;
+    @ManyToOne
+    @JoinColumn(name = "SoilGranulometricCompositionId", referencedColumnName = "id")
+    private SoilGranulometricComposition soilGranulometricCompositionId;
+    @ManyToOne
+    @JoinColumn(name = "SoilBedrockId", referencedColumnName = "id")
+    private SoilBedrock soilBedrockId;
+    @ManyToOne
+    @JoinColumn(name = "SoilParentrockId", referencedColumnName = "id")
+    private SoilParentrock soilParentrockId;
 }

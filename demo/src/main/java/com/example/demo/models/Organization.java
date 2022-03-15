@@ -20,11 +20,10 @@ public class Organization {
     @Basic
     @Column(name = "ControlCode")
     private Integer controlCode;
-    @Basic
-    @Column(name = "TerritoryId")
-    private Integer territoryId;
+    @ManyToOne
+    @JoinColumn(name = "TerritoryId", referencedColumnName = "id")
+    private Territory territory;
     @Basic
     @Column(name = "PrintingOrder")
     private Integer printingOrder;
-
 }
