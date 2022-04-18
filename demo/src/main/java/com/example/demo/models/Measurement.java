@@ -5,18 +5,15 @@ import lombok.*;
 import javax.persistence.*;
 
 @Data
-@Entity
+@Entity(name = "measurement_dateextracted")
 public class Measurement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "Id")
     private int id;
-    @Basic
-    @Column(name = "ExaminationYear")
-    private Integer examinationYear;
-    @Basic
-    @Column(name = "Tour")
-    private Integer tour;
+    @ManyToOne
+    @JoinColumn(name = "ExaminationDateId", referencedColumnName = "id")
+    private ExaminationDate examinationDateId;
     @ManyToOne
     @JoinColumn(name = "OrganizationId", referencedColumnName = "id")
     private Organization organizationId;
