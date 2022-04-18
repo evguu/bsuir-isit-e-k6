@@ -1,0 +1,25 @@
+Heil world!
+Link to self: <a th:href="@{/}">Click</a>
+
+Table example:
+<table>
+    <thead>
+        <tr>
+            <th>Year</th>
+            <th>Tour</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:if="${dates.empty}">
+            <td>Nothing found...</td>
+        </tr>
+        <tr th:each="date: ${dates}" th:attr="onclick=|document.location.replace('api/measurements?examinationDateId=${date.id}')|">
+            <td>
+                <span th:text="${date.examinationYear}">Year</span>
+            </td>
+            <td>
+                <span th:text="${date.tour}">Tour</span>
+            </td>
+        </tr>
+    </tbody>
+</table>

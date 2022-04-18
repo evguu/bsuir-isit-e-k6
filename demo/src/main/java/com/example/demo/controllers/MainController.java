@@ -1,24 +1,25 @@
 package com.example.demo.controllers;
 
-import com.example.demo.models.Organization;
-import com.example.demo.repositories.OrganizationRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.demo.repositories.ExaminationDateRepository;
+import org.jboss.jandex.Main;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping("/demo")
+@RequestMapping("/")
 public class MainController {
-    private final OrganizationRepository organizationRepository;
+    private final ExaminationDateRepository examinationDateRepository;
 
-    public MainController(OrganizationRepository organizationRepository) {
-        this.organizationRepository = organizationRepository;
+    public MainController(ExaminationDateRepository examinationDateRepository){
+        this.examinationDateRepository = examinationDateRepository;
     }
 
-    @GetMapping(path="/all")
-    public @ResponseBody Iterable<Organization> getAllOrganizations() {
-        return organizationRepository.findAll();
+
+    @GetMapping("/")
+    public String showIndexPage(Model model){
+        model.addAttribute("dates", examinationDateRepository.findAll());
+        return "index";
     }
 }
