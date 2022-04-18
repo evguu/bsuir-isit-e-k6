@@ -39,18 +39,4 @@ public class ApiController {
     public @ResponseBody Iterable<ExaminationDate> getAllExaminationDates() {
         return examinationDateRepository.findAll();
     }
-
-    @GetMapping(path="/measurements")
-    public @ResponseBody
-    List<Measurement> getAllMeasurements(
-            @RequestParam(defaultValue = "0") Integer page,
-            @RequestParam(defaultValue = "20") Integer size,
-            @RequestParam Integer examinationDateId
-    ){
-        if (size > 1000) { size = 1000; }
-        if (size < 1) { size = 1; }
-        Pageable pageable = PageRequest.of(page, size);
-        ExaminationDate examinationDate = examinationDateRepository.findById(examinationDateId).orElseThrow();
-        return measurementRepository.findAllByExaminationDateId(examinationDate, pageable);
-    }
 }

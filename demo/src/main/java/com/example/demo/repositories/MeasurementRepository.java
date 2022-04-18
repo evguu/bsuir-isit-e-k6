@@ -10,4 +10,5 @@ import java.util.List;
 
 public interface MeasurementRepository extends PagingAndSortingRepository<Measurement, Integer> {
     List<Measurement> findAllByExaminationDateId(ExaminationDate examinationDate, Pageable pageable);
+    Integer countByExaminationDateId(ExaminationDate examinationDate);
 }

@@ -5,21 +5,23 @@ Table example:
 <table>
     <thead>
         <tr>
-            <th>Year</th>
-            <th>Tour</th>
+            <th>Год</th>
+            <th>Тур</th>
+            <th>Ссылка</th>
         </tr>
     </thead>
     <tbody>
         <tr th:if="${dates.empty}">
             <td>Nothing found...</td>
         </tr>
-        <tr th:each="date: ${dates}" th:attr="onclick=|document.location.replace('api/measurements?examinationDateId=${date.id}')|">
+        <tr th:each="date: ${dates}">
             <td>
-                <span th:text="${date.examinationYear}">Year</span>
+                <span th:text="${date.examinationYear}">Год</span>
             </td>
             <td>
-                <span th:text="${date.tour}">Tour</span>
+                <span th:text="${date.tour}">Тур</span>
             </td>
+            <td><a th:href="@{api/measurements?examinationDateId=__${date.id}__}">Просмотреть данные</a></td>
         </tr>
     </tbody>
 </table>
