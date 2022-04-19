@@ -1,0 +1,48 @@
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+::-webkit-scrollbar-track {
+    background: white;        /* color of the tracking area */
+}
+::-webkit-scrollbar-thumb {
+    background-color: #ec8d8d;    /* color of the scroll thumb */
+    border-radius: 10px;       /* roundness of the scroll thumb */
+    border: 2px solid red;  /* creates padding around scroll thumb */
+}
+
+.table-wrapper {
+    width: 99vw;
+    height: 90vh;
+    overflow: scroll;
+}
+
+#measurement-table {
+    border-collapse: collapse;
+}
+
+#measurement-table th {
+    padding: 10px;
+    background-color: #fac7c7;
+    border: 1px solid red;
+
+    text-align: center;
+}
+
+#measurement-table td {
+    border: 1px solid black;
+    padding: 5px;
+
+    text-align: right;
+}
+
+.page-nav {
+    float:left;
+    font-size: small;
+    font-style: italic;
+    text-align: center;
+    white-space:nowrap;
+
+    width: 99vw;
+    overflow: scroll;
+}
