@@ -1,26 +1,31 @@
 const dataSource = document.getElementById("examination-date-dropdown-data");
-let data = dataSource.getAttribute("value");
-data = data.replaceAll("=", ":");
-data = data.replaceAll("ExaminationDate(", "{");
-data = data.replaceAll(")", "}");
-eval("data = " + data); // Potential security risk!
+let examinationDates = dataSource.getAttribute("value");
+examinationDates = examinationDates.replaceAll("=", ":");
+examinationDates = examinationDates.replaceAll("ExaminationDate(", "{");
+examinationDates = examinationDates.replaceAll(")", "}");
+eval("examinationDates = " + examinationDates); // Potential security risk!
 dataSource.remove();
 
-const years = Object.keys(data);
-console.log(years);
+const tourDateMap = {};
+for (examinationDate of examinationDates){
+    if (!Object.keys(tourDateMap).includes(examinationDate.tour+"")){
+        tourDateMap[examinationDate.tour] = [];
+    }
+    tourDateMap[examinationDate.tour].push(examinationDate);
+}
 
 const mainDropdown = document.createElement("select");
-updateDropdown(mainDropdown, years);
+updateDropdown(mainDropdown, Object.keys(tourDateMap));
 
 const container = document.getElementById("examination-date-dropdown-container");
 container.appendChild(mainDropdown);
 
 const subDropdown = document.createElement("select");
-updateDropdown(subDropdown, data[mainDropdown.value], e => e.tour);
+updateDropdown(subDropdown, tourDateMap[mainDropdown.value], e => e.examinationYear);
 container.appendChild(subDropdown);
 
 mainDropdown.onchange = ()=>{
-    updateDropdown(subDropdown, data[mainDropdown.value], e => e.tour);
+    updateDropdown(subDropdown, tourDateMap[mainDropdown.value], e => e.examinationYear);
 };
 
 

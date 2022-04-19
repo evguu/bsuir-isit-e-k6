@@ -18,16 +18,7 @@ public class ExaminationDateService {
         this.examinationDateRepository = examinationDateRepository;
     }
 
-    public Map<Integer, List<ExaminationDate>> getDateYearMap() {
-        Map<Integer, List<ExaminationDate>> dateYearMap = new HashMap<>();
-        Iterable<ExaminationDate> examinationDates = examinationDateRepository.findAll();
-        for (ExaminationDate examinationDate: examinationDates){
-            Integer year = examinationDate.getExaminationYear();
-            if (!dateYearMap.containsKey(year)){
-                dateYearMap.put(year, new ArrayList<>());
-            }
-            dateYearMap.get(year).add(examinationDate);
-        }
-        return dateYearMap;
+    public Iterable<ExaminationDate> getAll() {
+        return examinationDateRepository.findAll();
     }
 }

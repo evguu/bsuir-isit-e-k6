@@ -20,13 +20,11 @@ import java.util.List;
 @RequestMapping("/api")
 public class ApiController {
     private final OrganizationRepository organizationRepository;
-    private final MeasurementRepository measurementRepository;
     private final ExaminationDateRepository examinationDateRepository;
 
-    public ApiController(OrganizationRepository organizationRepository, MeasurementRepository measurementRepository,
+    public ApiController(OrganizationRepository organizationRepository,
                          ExaminationDateRepository examinationDateRepository) {
         this.organizationRepository = organizationRepository;
-        this.measurementRepository = measurementRepository;
         this.examinationDateRepository = examinationDateRepository;
     }
 

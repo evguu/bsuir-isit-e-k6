@@ -19,7 +19,7 @@ public class MainController {
 
     @GetMapping("/")
     public String showIndexPage(Model model){
-        model.addAttribute("dates", examinationDateService.getDateYearMap());
+        model.addAttribute("dates", examinationDateService.getAll());
         return "index";
     }
 }
