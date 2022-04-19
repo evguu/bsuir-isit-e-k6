@@ -4,6 +4,8 @@ import com.example.demo.models.ExaminationDate;
 import com.example.demo.models.Measurement;
 import com.example.demo.repositories.ExaminationDateRepository;
 import com.example.demo.repositories.MeasurementRepository;
+import com.example.demo.services.ExaminationDateService;
+import com.example.demo.services.MeasurementService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
@@ -18,12 +20,10 @@ import java.util.List;
 @Controller
 @RequestMapping("/api")
 public class MeasurementController {
-    private final ExaminationDateRepository examinationDateRepository;
-    private final MeasurementRepository measurementRepository;
+    private final MeasurementService measurementService;
 
-    public MeasurementController(ExaminationDateRepository examinationDateRepository, MeasurementRepository measurementRepository) {
-        this.examinationDateRepository = examinationDateRepository;
-        this.measurementRepository = measurementRepository;
+    public MeasurementController(MeasurementService measurementService) {
+        this.measurementService = measurementService;
     }
 
     @GetMapping(path="/measurements")
@@ -33,20 +33,13 @@ public class MeasurementController {
             @RequestParam(defaultValue = "20") Integer size,
             @RequestParam Integer examinationDateId
     ){
-        if (size > 1000) { size = 1000; }
-        if (size < 1) { size = 1; }
-        Pageable pageable = PageRequest.of(page, size);
-        ExaminationDate examinationDate = examinationDateRepository.findById(examinationDateId).orElseThrow();
-        return measurementRepository.findAllByExaminationDateId(examinationDate, pageable);
+        return measurementService.getPageByExaminationDate(page, size, examinationDateId);
     }
     @GetMapping(path="/measurements/count_pages")
     public @ResponseBody Integer getPageCount(
             @RequestParam(defaultValue = "20") Integer size,
             @RequestParam Integer examinationDateId
     ){
-        if (size > 1000) { size = 1000; }
-        if (size < 1) { size = 1; }
-        ExaminationDate examinationDate = examinationDateRepository.findById(examinationDateId).orElseThrow();
-        return measurementRepository.countByExaminationDateId(examinationDate) / size;
+        return measurementService.getPageCountByExaminationDate(size, examinationDateId);
     }
 }

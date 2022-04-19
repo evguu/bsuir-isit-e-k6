@@ -1,6 +1,6 @@
 package com.example.demo.controllers;
 
-import com.example.demo.repositories.ExaminationDateRepository;
+import com.example.demo.services.ExaminationDateService;
 import org.jboss.jandex.Main;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,16 +10,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/")
 public class MainController {
-    private final ExaminationDateRepository examinationDateRepository;
+    private final ExaminationDateService examinationDateService;
 
-    public MainController(ExaminationDateRepository examinationDateRepository){
-        this.examinationDateRepository = examinationDateRepository;
+    public MainController(ExaminationDateService examinationDateService){
+        this.examinationDateService = examinationDateService;
     }
 
 
     @GetMapping("/")
     public String showIndexPage(Model model){
-        model.addAttribute("dates", examinationDateRepository.findAll());
+        model.addAttribute("dates", examinationDateService.getDateYearMap());
         return "index";
     }
 }

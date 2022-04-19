@@ -1,27 +1,24 @@
-Heil world!
-Link to self: <a th:href="@{/}">Click</a>
+<html>
 
-Table example:
-<table>
-    <thead>
-        <tr>
-            <th>Год</th>
-            <th>Тур</th>
-            <th>Ссылка</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr th:if="${dates.empty}">
-            <td>Nothing found...</td>
-        </tr>
-        <tr th:each="date: ${dates}">
-            <td>
-                <span th:text="${date.examinationYear}">Год</span>
-            </td>
-            <td>
-                <span th:text="${date.tour}">Тур</span>
-            </td>
-            <td><a th:href="@{api/measurements?examinationDateId=__${date.id}__}">Просмотреть данные</a></td>
-        </tr>
-    </tbody>
-</table>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Отобжеие дат</title>
+</head>
+
+<body>
+Heil word!
+Link to self: <a href="http://localhost:8080/">Click</a>
+
+Пример выбора дат:
+<input
+        type="hidden"
+        id="examination-date-dropdown-data"
+        th:value="${dates}"/>
+
+<div id="examination-date-dropdown-container"></div>
+
+<script src="js/examination_date_dropdown.js"></script>
+
+</body>
+
+</html>
