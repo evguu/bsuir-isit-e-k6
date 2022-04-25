@@ -5,7 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 
 @Data
-@Entity(name = "measurement_dateextracted")
+@Entity(name = "measurement")
 public class Measurement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
