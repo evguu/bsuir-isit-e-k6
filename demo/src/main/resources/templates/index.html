@@ -1,17 +1,5 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<head th:replace="common.html :: head"/>
 <body>
-    <div sec:authorize="isAnonymous()">
-        <p>Вы не авторизованы. <a th:href="@{/login}">Войдите</a> либо <a th:href="@{/register}">зарегистрируйтесь</a>. </p>
-        <p>После регистрации дождитесь одобрения администратора и сможете авторизоваться.</p>
-    </div>
-    <div sec:authorize="isAuthenticated()">
-    <p>Здравствуйте, <span sec:authentication="name"/>!</p>
-    <p>Вы можете <a th:href="@{/logout}">выйти</a>.</p>
-    </div>
+<header th:replace="common.html :: header"></header>
+Это главная страница. Привет!
 </body>
-</html>

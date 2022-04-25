@@ -1,24 +1,15 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head>
-</head>
+<head th:replace="common.html :: head"/>
 <body>
-<div>
-    <div>
-        <div>
-            <p>Регистрация</p>
+    <header th:replace="common.html :: header"></header>
+    <p>Регистрация</p>
 
-            <form action="#" th:action="@{/register}" th:object="${user}" method="post">
+    <form action="#" th:action="@{/register}" th:object="${user}" method="post">
 
-                <p th:each="err : ${errors}" th:text="${err.getDefaultMessage()}"></p>
+        <p th:each="err : ${errors}" th:text="${err.getDefaultMessage()}"></p>
 
-                <input type="text" th:field="*{username}" placeholder="Логин">
-                <input type="password" th:field="*{password}" placeholder="Пароль">
-                <input type="password" placeholder="Повторите пароль" th:field="*{matchingPassword}">
-                <input type="submit" value="Зарегистрироваться"/>
-            </form>
-        </div>
-    </div>
-</div>
+        <input type="text" th:field="*{username}" placeholder="Логин">
+        <input type="password" th:field="*{password}" placeholder="Пароль">
+        <input type="password" placeholder="Повторите пароль" th:field="*{matchingPassword}">
+        <input type="submit" value="Зарегистрироваться"/>
+    </form>
 </body>
-</html>

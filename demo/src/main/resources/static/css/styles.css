@@ -14,12 +14,20 @@
 body {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr 18fr 2fr;
+    grid-template-rows: 1fr 1fr 18fr 2fr;
     grid-template-areas:
+        "true-header"
         "header"
         "main"
         "footer";
     grid-row-gap: 2px;
+}
+
+header {
+    grid-area: true-header;
+    background-color: #ec8d8d;
+    padding: 10px;
+    text-align: center;
 }
 
 .dropdown-container {
@@ -31,11 +39,11 @@ body {
     overflow: scroll;
 }
 
-#measurement-table {
+table {
     border-collapse: collapse;
 }
 
-#measurement-table th {
+table th {
     padding: 10px;
     background-color: #fac7c7;
     border: 1px solid red;
@@ -44,7 +52,7 @@ body {
     font-size: 0.75em;
 }
 
-#measurement-table td {
+table td {
     border: 1px solid black;
     padding: 5px;
 
