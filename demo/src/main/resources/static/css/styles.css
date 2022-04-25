@@ -2,41 +2,15 @@
     width: 10px;
     height: 10px;
 }
+
 ::-webkit-scrollbar-track {
-    background: white;        /* color of the tracking area */
+    background: rgba(0, 0, 0, 0.15); /* color of the tracking area */
 }
+
 ::-webkit-scrollbar-thumb {
-    background-color: #ec8d8d;    /* color of the scroll thumb */
-    border-radius: 10px;       /* roundness of the scroll thumb */
-    border: 2px solid red;  /* creates padding around scroll thumb */
-}
-
-body {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr 18fr 2fr;
-    grid-template-areas:
-        "true-header"
-        "header"
-        "main"
-        "footer";
-    grid-row-gap: 2px;
-}
-
-header {
-    grid-area: true-header;
-    background-color: #ec8d8d;
-    padding: 10px;
-    text-align: center;
-}
-
-.dropdown-container {
-    grid-area: header;
-}
-
-.table-wrapper {
-    grid-area: main;
-    overflow: scroll;
+    background-color: #a58dec; /* color of the scroll thumb */
+    border-radius: 10px; /* roundness of the scroll thumb */
+    border: 2px solid #00eaff; /* creates padding around scroll thumb */
 }
 
 table {
@@ -45,8 +19,8 @@ table {
 
 table th {
     padding: 10px;
-    background-color: #fac7c7;
-    border: 1px solid red;
+    background-color: #c7f1fa;
+    border: 1px solid #d000ff;
 
     text-align: center;
     font-size: 0.75em;
@@ -63,8 +37,8 @@ table td {
 
 .page-nav {
     grid-area: footer;
-    white-space:nowrap;
-    float:left;
+    white-space: nowrap;
+    float: left;
     width: 99vw;
     overflow: scroll;
 }
@@ -75,4 +49,35 @@ table td {
     font-size: 1.1em;
     width: 3em;
     text-align: center;
+}
+
+
+/*Front nastya*/
+body {
+    background: #406ad7;
+    font-weight: 400;
+}
+
+.main-contrainer {
+    /*padding-top: 2%;*/
+}
+
+.navbar-light {
+    background-color: #fff;
+}
+
+.right-force {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.auth-inner {
+    margin: 10px;
+    background: #fff;
+    border-radius: 10px;
+
+    grid-area: main;
+    height: 80vh;
+
+    overflow: scroll;
 }

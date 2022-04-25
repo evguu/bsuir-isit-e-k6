@@ -269,6 +269,8 @@ function rebuildPageNav(pageCount) {
     for (let i = 0; i < pageCount + 1; i++) {
         const button = $("<button>");
         button.text(i + 1);
+        button[0].classList.add("btn");
+        button[0].classList.add("btn-secondary");
         button.click(() => $.getJSON(`/api/measurements?examinationDateId=${subDropdown.value}&page=${i}`, rebuildTable));
         pageList.append(button);
     }
