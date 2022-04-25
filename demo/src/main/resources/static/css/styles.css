@@ -11,9 +11,23 @@
     border: 2px solid red;  /* creates padding around scroll thumb */
 }
 
+body {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 18fr 2fr;
+    grid-template-areas:
+        "header"
+        "main"
+        "footer";
+    grid-row-gap: 2px;
+}
+
+.dropdown-container {
+    grid-area: header;
+}
+
 .table-wrapper {
-    width: 99vw;
-    height: 90vh;
+    grid-area: main;
     overflow: scroll;
 }
 
@@ -27,6 +41,7 @@
     border: 1px solid red;
 
     text-align: center;
+    font-size: 0.75em;
 }
 
 #measurement-table td {
@@ -34,15 +49,22 @@
     padding: 5px;
 
     text-align: right;
+
+    font-size: 0.8em;
 }
 
 .page-nav {
-    float:left;
-    font-size: small;
-    font-style: italic;
-    text-align: center;
+    grid-area: footer;
     white-space:nowrap;
-
+    float:left;
     width: 99vw;
     overflow: scroll;
+}
+
+.page-nav button {
+    margin-top: 10px;
+    padding: 5px;
+    font-size: 1.1em;
+    width: 3em;
+    text-align: center;
 }

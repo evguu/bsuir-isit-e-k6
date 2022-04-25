@@ -1,6 +1,6 @@
 const dataSource = document.getElementById("examination-date-dropdown-data");
 
-const container = document.getElementById("examination-date-dropdown-container");
+const container = document.getElementById("dropdown-container");
 const mainDropdown = document.createElement("select");
 const subDropdown = document.createElement("select");
 
