@@ -1,7 +1,6 @@
 package com.example.demo.controllers;
 
 import com.example.demo.services.ExaminationDateService;
-import org.jboss.jandex.Main;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +18,12 @@ public class MainController {
 
     @GetMapping("/")
     public String showIndexPage(Model model){
-        model.addAttribute("dates", examinationDateService.getAll());
         return "index";
+    }
+
+    @GetMapping("/measurement_view")
+    public String showMeasurementViewPage(Model model){
+        model.addAttribute("dates", examinationDateService.getAll());
+        return "measurement_view";
     }
 }
