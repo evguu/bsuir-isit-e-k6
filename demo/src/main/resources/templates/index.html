@@ -1,10 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
-  Index page. Login or register.
+    <div sec:authorize="isAnonymous()">
+        <p>Вы не авторизованы. <a th:href="@{/login}">Войдите</a> либо <a th:href="@{/register}">зарегистрируйтесь</a>. </p>
+        <p>После регистрации дождитесь одобрения администратора и сможете авторизоваться.</p>
+    </div>
+    <div sec:authorize="isAuthenticated()">
+    <p>Здравствуйте, <span sec:authentication="name"/>!</p>
+    <p>Вы можете <a th:href="@{/logout}">выйти</a>.</p>
+    </div>
 </body>
 </html>

@@ -35,11 +35,7 @@ public class AuthenticationController {
             @Valid UserDto userDto, BindingResult bindingResult, Model model) {
 
         if(bindingResult.hasErrors()){
-            System.out.println("Binding result has errors");
-            // Print errors
-            for (Object object : bindingResult.getAllErrors()) { // TODO: remove this
-                System.out.println(object);
-            }
+            model.addAttribute("errors", bindingResult.getAllErrors());
             model.addAttribute("user", userDto);
             return "registration";
         }
@@ -47,6 +43,7 @@ public class AuthenticationController {
             userService.registerNewUserAccount(userDto);
         }catch (UserAlreadyExistException e){
             bindingResult.rejectValue("username", "userDto.username","Имя пользователя занято.");
+            model.addAttribute("errors", bindingResult.getAllErrors());
             model.addAttribute("user", userDto);
             return "registration";
         }

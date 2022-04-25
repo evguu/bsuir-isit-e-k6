@@ -14,8 +14,6 @@ public class PasswordMatchesValidator
     @Override
     public boolean isValid(Object obj, ConstraintValidatorContext context){
         UserDto user = (UserDto) obj;
-        System.out.println(user.getPassword()); // TODO: remove this
-        System.out.println(user.getMatchingPassword());
         return user.getPassword().equals(user.getMatchingPassword());
     }
 }

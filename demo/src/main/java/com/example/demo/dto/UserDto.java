@@ -9,12 +9,12 @@ import lombok.Data;
 @Data
 @PasswordMatches
 public class UserDto {
-    @NotNull
-    @NotEmpty
+    @NotNull(message = "Логин не может быть пустым")
+    @NotEmpty(message = "Логин не может быть пустым")
     private String username;
 
-    @NotNull
-    @NotEmpty
+    @NotNull(message = "Пароль не может быть пустым")
+    @NotEmpty(message = "Пароль не может быть пустым")
     private String password;
     private String matchingPassword;
 }
