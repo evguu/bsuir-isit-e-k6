@@ -46,10 +46,7 @@ function onMainDropdownChange() {
 }
 
 function onSubDropdownChange() {
-    $.getJSON(`/api/measurements?examinationDateId=${subDropdown.value}`,
-        rebuildTable);
-    $.getJSON(`/api/measurements/count_pages?examinationDateId=${subDropdown.value}`,
-        rebuildPageNav);
+    $.getJSON(getUrlBase() + `&page=0&limit=20`, rebuildFromData);
 }
 
 const tableColumns = [
@@ -240,6 +237,16 @@ const tableColumns = [
     },
 ]
 
+function getUrlBase(){
+    return `/api/measurement?filter=%20examinationDateId.id%20>%20${subDropdown.value * 1 - 1}%20AND%20examinationDateId.id%20<%20${subDropdown.value * 1 + 1}`;
+}
+
+function rebuildFromData(data) {
+    console.log(data);
+    rebuildTable(data.content);
+    rebuildPageNav(data.totalPages, data.number);
+}
+
 function rebuildTable(data) {
     const table = document.getElementById("measurement-table");
     table.innerHTML = "";
@@ -263,15 +270,66 @@ function rebuildTable(data) {
     }
 }
 
-function rebuildPageNav(pageCount) {
+function rebuildPageNav(pageCount, pageNumber) {
+    pageCount *= 1;
+    pageNumber *= 1;
+    console.log(pageCount, pageNumber);
     const pageList = $("#page-nav");
     pageList.html("");
-    for (let i = 0; i < pageCount + 1; i++) {
-        const button = $("<button>");
-        button.text(i + 1);
-        button[0].classList.add("btn");
-        button[0].classList.add("btn-secondary");
-        button.click(() => $.getJSON(`/api/measurements?examinationDateId=${subDropdown.value}&page=${i}`, rebuildTable));
-        pageList.append(button);
+
+    const prevHolder = $("<div>");
+    prevHolder[0].style.gridArea = "prev-page";
+    prevHolder[0].style.display = "flex";
+    prevHolder[0].style.justifyContent = "right";
+    pageList.append(prevHolder);
+
+    const pageNumberHolder = $("<p>");
+    pageNumberHolder.text("стр. " + (pageNumber+1));
+
+    pageNumberHolder[0].style.color = "white";
+    pageNumberHolder[0].style.fontSize = "1.5em";
+    pageNumberHolder[0].style.margin = "0.1em";
+    pageNumberHolder[0].style.backgroundColor = "rgba(0,0,0,0.5)";
+
+    pageNumberHolder[0].style.gridArea = "current-page";
+    pageNumberHolder[0].style.display = "flex";
+    pageNumberHolder[0].style.justifyContent = "center";
+    pageList.append(pageNumberHolder);
+
+    const nextHolder = $("<div>");
+    nextHolder[0].style.gridArea = "next-page";
+    nextHolder[0].style.display = "flex";
+    nextHolder[0].style.justifyContent = "left";
+    pageList.append(nextHolder);
+
+
+    let pageStep = 1;
+    while (pageCount / pageStep > 1) {
+
+        const isPlusButtonNecessary = ((pageNumber + pageStep) < pageCount);
+        if (isPlusButtonNecessary) {
+            const button = $("<button>");
+            button.text(`+${pageStep}`);
+            button[0].classList.add("btn");
+            button[0].classList.add("btn-secondary");
+            const destinationPage = pageNumber + pageStep;
+            button.click(() => $.getJSON(getUrlBase() + `&page=${destinationPage}&limit=20`,
+                rebuildFromData));
+            nextHolder.append(button);
+        }
+
+        const isMinusButtonNecessary = ((pageNumber - pageStep) >= 0);
+        if (isMinusButtonNecessary) {
+            const button = $("<button>");
+            button.text(`-${pageStep}`);
+            button[0].classList.add("btn");
+            button[0].classList.add("btn-secondary");
+            const destinationPage = pageNumber - pageStep;
+            button.click(() => $.getJSON(getUrlBase() + `&page=${destinationPage}&limit=20`,
+                rebuildFromData));
+            prevHolder.append(button);
+        }
+
+        pageStep *= 10;
     }
 }

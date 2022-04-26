@@ -15,10 +15,13 @@
 
 table {
     border-collapse: collapse;
+    color: black;
 }
 
 table th {
-    padding: 10px;
+    padding-top: 4px;
+    padding-left: 3px;
+    padding-right: 5px;
     background-color: #c7f1fa;
     border: 1px solid #d000ff;
 
@@ -28,34 +31,37 @@ table th {
 
 table td {
     border: 1px solid black;
-    padding: 5px;
 
     text-align: right;
 
     font-size: 0.8em;
+    padding-right: 5px;
 }
 
 .page-nav {
     grid-area: footer;
     white-space: nowrap;
-    float: left;
-    width: 99vw;
-    overflow: scroll;
+    display: grid;
+    grid-template-columns: 20fr 1fr 20fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: "prev-page current-page next-page";
 }
 
 .page-nav button {
     margin-top: 10px;
     padding: 5px;
     font-size: 1.1em;
-    width: 3em;
+    width: 5em;
     text-align: center;
 }
 
-
-/*Front nastya*/
 body {
     background: #406ad7;
     font-weight: 400;
+    color: white;
+
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .main-contrainer {
