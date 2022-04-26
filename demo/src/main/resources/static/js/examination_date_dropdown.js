@@ -238,7 +238,7 @@ const tableColumns = [
 ]
 
 function getUrlBase(){
-    return `/api/measurement?filter=%20examinationDateId.id%20>%20${subDropdown.value * 1 - 1}%20AND%20examinationDateId.id%20<%20${subDropdown.value * 1 + 1}`;
+    return `/api/measurement?filter=%20examinationDateId.id%20:%20${subDropdown.value}`;
 }
 
 function rebuildFromData(data) {
@@ -278,28 +278,16 @@ function rebuildPageNav(pageCount, pageNumber) {
     pageList.html("");
 
     const prevHolder = $("<div>");
-    prevHolder[0].style.gridArea = "prev-page";
-    prevHolder[0].style.display = "flex";
-    prevHolder[0].style.justifyContent = "right";
+    prevHolder.addClass("page-nav-prev");
     pageList.append(prevHolder);
 
     const pageNumberHolder = $("<p>");
     pageNumberHolder.text("стр. " + (pageNumber+1));
-
-    pageNumberHolder[0].style.color = "white";
-    pageNumberHolder[0].style.fontSize = "1.5em";
-    pageNumberHolder[0].style.margin = "0.1em";
-    pageNumberHolder[0].style.backgroundColor = "rgba(0,0,0,0.5)";
-
-    pageNumberHolder[0].style.gridArea = "current-page";
-    pageNumberHolder[0].style.display = "flex";
-    pageNumberHolder[0].style.justifyContent = "center";
+    pageNumberHolder.addClass("page-nav-current");
     pageList.append(pageNumberHolder);
 
     const nextHolder = $("<div>");
-    nextHolder[0].style.gridArea = "next-page";
-    nextHolder[0].style.display = "flex";
-    nextHolder[0].style.justifyContent = "left";
+    nextHolder.addClass("page-nav-next");
     pageList.append(nextHolder);
 
 
@@ -310,8 +298,6 @@ function rebuildPageNav(pageCount, pageNumber) {
         if (isPlusButtonNecessary) {
             const button = $("<button>");
             button.text(`+${pageStep}`);
-            button[0].classList.add("btn");
-            button[0].classList.add("btn-secondary");
             const destinationPage = pageNumber + pageStep;
             button.click(() => $.getJSON(getUrlBase() + `&page=${destinationPage}&limit=20`,
                 rebuildFromData));
@@ -322,8 +308,6 @@ function rebuildPageNav(pageCount, pageNumber) {
         if (isMinusButtonNecessary) {
             const button = $("<button>");
             button.text(`-${pageStep}`);
-            button[0].classList.add("btn");
-            button[0].classList.add("btn-secondary");
             const destinationPage = pageNumber - pageStep;
             button.click(() => $.getJSON(getUrlBase() + `&page=${destinationPage}&limit=20`,
                 rebuildFromData));

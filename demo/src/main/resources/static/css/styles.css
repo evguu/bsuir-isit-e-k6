@@ -22,8 +22,8 @@ table th {
     padding-top: 4px;
     padding-left: 3px;
     padding-right: 5px;
-    background-color: #c7f1fa;
-    border: 1px solid #d000ff;
+    background: -webkit-linear-gradient(top, #daf6ea 0%, #c7d9fa 100%);
+    border: 1px solid #410052;
 
     text-align: center;
     font-size: 0.75em;
@@ -36,8 +36,12 @@ table td {
 
     font-size: 0.8em;
     padding-right: 5px;
+
+    background: rgba(66, 131, 176, 0.17);
 }
 
+
+/* Стили для кнопок переключения страниц*/
 .page-nav {
     grid-area: footer;
     white-space: nowrap;
@@ -47,16 +51,45 @@ table td {
     grid-template-areas: "prev-page current-page next-page";
 }
 
+.page-nav-prev {
+    grid-area: prev-page;
+    display: flex;
+    justify-content: right;
+}
+
+.page-nav-current {
+    grid-area: current-page;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    /* Отделить от соседей */
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.page-nav-next {
+    grid-area: next-page;
+    display: flex;
+    justify-content: left;
+}
+
 .page-nav button {
-    margin-top: 10px;
     padding: 5px;
     font-size: 1.1em;
     width: 5em;
     text-align: center;
+
+    background: rgba(255, 255, 255, 0.7);
 }
 
+select {
+    background: rgba(255, 255, 255, 0.7);
+}
+
+
 body {
-    background: #406ad7;
+    background: linear-gradient(to bottom, #4283b0, #2b61b2);
     font-weight: 400;
     color: white;
 
@@ -69,7 +102,8 @@ body {
 }
 
 .navbar-light {
-    background-color: #fff;
+    background: #e9f5f3;
+    box-shadow: 0 14px 80px rgba(34, 35, 58, .2);
 }
 
 .right-force {
@@ -78,7 +112,10 @@ body {
 }
 
 .auth-inner {
-    margin: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+    padding: 10px;
     background: #fff;
     border-radius: 10px;
 
@@ -86,4 +123,6 @@ body {
     height: 80vh;
 
     overflow: scroll;
+
+    box-shadow: 0 14px 80px rgba(34, 35, 58, .2);
 }
