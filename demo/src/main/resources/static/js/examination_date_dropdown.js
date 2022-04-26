@@ -11,6 +11,9 @@ examinationDates = examinationDates.replaceAll(")", "}");
 eval("examinationDates = " + examinationDates); // Potential security risk!
 dataSource.remove();
 
+let sortColumn = "id";
+let sortDirection = "asc";
+
 const tourDateMap = {};
 for (examinationDate of examinationDates) {
     if (!Object.keys(tourDateMap).includes(examinationDate.tour + "")) {
@@ -52,193 +55,239 @@ function onSubDropdownChange() {
 const tableColumns = [
     {
         name: "ID",
-        getter: e => e["id"]
+        getter: e => e["id"],
+        prop: "id"
     },
     {
         name: "Наименование организации",
-        getter: e => e["organizationId"]["name"]
+        getter: e => e["organizationId"]["name"],
+        prop: "organizationId.name"
     },
     {
         name: "Код угодья",
-        getter: e => e["landCode"]
+        getter: e => e["landCode"],
+        prop: "landCode"
     },
     {
         name: "Hомеp пpоизводственного участка",
-        getter: e => e["productionAreaNo"]
+        getter: e => e["productionAreaNo"],
+        prop: "productionAreaNo"
     },
     {
         name: "Hомеp севообоpота",
-        getter: e => e["cropRotationNo"]
+        getter: e => e["cropRotationNo"],
+        prop: "cropRotationNo"
     },
     {
         name: "Hомеp поля севообоpота",
-        getter: e => e["cropRotationFieldNo"]
+        getter: e => e["cropRotationFieldNo"],
+        prop: "cropRotationFieldNo"
     },
     {
         name: "Площадь поля севообоpота",
-        getter: e => e["cropRotationFieldArea"]
+        getter: e => e["cropRotationFieldArea"],
+        prop: "cropRotationFieldArea"
     },
     {
         name: "Hомеp pабочего участка",
-        getter: e => e["workingAreaNo"]
+        getter: e => e["workingAreaNo"],
+        prop: "workingAreaNo"
     },
     {
         name: "Площадь pабочего участка",
-        getter: e => e["workingAreaArea"]
+        getter: e => e["workingAreaArea"],
+        prop: "workingAreaArea"
     },
     {
         name: "Hомеp элементаpного участка",
-        getter: e => e["elementaryAreaNo"]
+        getter: e => e["elementaryAreaNo"],
+        prop: "elementaryAreaNo"
     },
     {
         name: "Площадь элементаpного участка",
-        getter: e => e["elementaryAreaArea"]
+        getter: e => e["elementaryAreaArea"],
+        prop: "elementaryAreaArea"
     },
     {
         name: "Тип почвы",
-        getter: e => e["soilTypeId"]["meaning"]
+        getter: e => e["soilTypeId"]["meaning"],
+        prop: "soilTypeId.meaning"
     },
     {
         name: "Степень увлажнения, мощность торфяных залежей",
-        getter: e => e["soilHydrationAndTurfId"]["meaning"]
+        getter: e => e["soilHydrationAndTurfId"]["meaning"],
+        prop: "soilHydrationAndTurfId.meaning"
     },
     {
         name: "Гранулометрический состав",
-        getter: e => e["soilGranulometricCompositionId"]["meaning"]
+        getter: e => e["soilGranulometricCompositionId"]["meaning"],
+        prop: "soilGranulometricCompositionId.meaning"
     },
     {
         name: "Подстилающая порода",
-        getter: e => e["soilBedrockId"]["meaning"]
+        getter: e => e["soilBedrockId"]["meaning"],
+        prop: "soilBedrockId.meaning"
     },
     {
         name: "Почвообразующая порода",
-        getter: e => e["soilParentrockId"]["meaning"]
+        getter: e => e["soilParentrockId"]["meaning"],
+        prop: "soilParentrockId.meaning"
     },
 
     {
         name: "Мелиоpативное состояние",
-        getter: e => e["ameliorativeStateId"]["meaning"]
+        getter: e => e["ameliorativeStateId"]["meaning"],
+        prop: "ameliorativeStateId.meaning"
     },
     {
         name: "Мощность гумусового гоpизонта",
-        getter: e => e["humusHorizonThickness"]
+        getter: e => e["humusHorizonThickness"],
+        prop: "humusHorizonThickness"
     },
     {
         name: "pH в KCL",
-        getter: e => e["ph"]
+        getter: e => e["ph"],
+        prop: "ph"
     },
     {
         name: "Гумус",
-        getter: e => e["humus"]
+        getter: e => e["humus"],
+        prop: "humus"
     },
     {
         name: "СППФ P2O5, мг/кг",
-        getter: e => e["measurementP2O5"]
+        getter: e => e["measurementP2O5"],
+        prop: "measurementP2O5"
     },
     {
         name: "СППФ K2O, мг/кг",
-        getter: e => e["measurementK2O"]
+        getter: e => e["measurementK2O"],
+        prop: "measurementK2O"
     },
     {
         name: "СППф CaO, мг/кг",
-        getter: e => e["measurementCaO"]
+        getter: e => e["measurementCaO"],
+        prop: "measurementCaO"
     },
     {
         name: "СППФ MgO, мг/кг",
-        getter: e => e["measurementMgO"]
+        getter: e => e["measurementMgO"],
+        prop: "measurementMgO"
     },
     {
         name: "СППФ серы, мг/кг",
-        getter: e => e["measurementSulphur"]
+        getter: e => e["measurementSulphur"],
+        prop: "measurementSulphur"
     },
     {
         name: "СППФ бора, мг/кг",
-        getter: e => e["measurementBoron"]
+        getter: e => e["measurementBoron"],
+        prop: "measurementBoron"
     },
     {
         name: "СППФ меди, мг/кг",
-        getter: e => e["measurementCopper"]
+        getter: e => e["measurementCopper"],
+        prop: "measurementCopper"
     },
     {
         name: "СППФ цинка, мг/кг",
-        getter: e => e["measurementZink"]
+        getter: e => e["measurementZink"],
+        prop: "measurementZink"
     },
     {
         name: "СППФ Mn, мг/кг",
-        getter: e => e["measurementManganese"]
+        getter: e => e["measurementManganese"],
+        prop: "measurementManganese"
     },
     {
         name: "СППФ Co, мг/кг",
-        getter: e => e["measurementCobalt"]
+        getter: e => e["measurementCobalt"],
+        prop: "measurementCobalt"
     },
     {
         name: "Емкость катионного обмена",
-        getter: e => e["cationExchangeCapacity"]
+        getter: e => e["cationExchangeCapacity"],
+        prop: "cationExchangeCapacity"
     },
     {
         name: "% K2O от емкости катионного обмена",
-        getter: e => e["cationExchangeCapacityK20"]
+        getter: e => e["cationExchangeCapacityK20"],
+        prop: "cationExchangeCapacityK20"
     },
     {
         name: "P2O5 в вытяжке 0,01 MCaCl2, мг/л",
-        getter: e => e["p2O5InExtract"]
+        getter: e => e["p2O5InExtract"],
+        prop: "p2O5InExtract"
     },
     {
         name: "СППФ NO3 An, мг/кг",
-        getter: e => e["measurementNo3An"]
+        getter: e => e["measurementNo3An"],
+        prop: "measurementNo3An"
     },
     {
         name: "СППФ NO3 A2, мг/кг",
-        getter: e => e["measurementNo3A2"]
+        getter: e => e["measurementNo3A2"],
+        prop: "measurementNo3A2"
     },
     {
         name: "СППФ NH4+ An, мг/кг",
-        getter: e => e["measurementNo4PlusAn"]
+        getter: e => e["measurementNo4PlusAn"],
+        prop: "measurementNo4PlusAn"
     },
     {
         name: "СППФ NH4+ A2, мг/кг",
-        getter: e => e["measurementNo4PlusA2"]
+        getter: e => e["measurementNo4PlusA2"],
+        prop: "measurementNo4PlusA2"
     },
     {
         name: "СППФ Pb, мг/кг",
-        getter: e => e["measurementLead"]
+        getter: e => e["measurementLead"],
+        prop: "measurementLead"
     },
     {
         name: "СППФ Cd, мг/кг",
-        getter: e => e["measurementCadmium"]
+        getter: e => e["measurementCadmium"],
+        prop: "measurementCadmium"
     },
     {
         name: "Валовое содеpжание Рв,мг/кг",
-        getter: e => e["grossContentLead"]
+        getter: e => e["grossContentLead"],
+        prop: "grossContentLead"
     },
     {
         name: "Валовое содеpжание Cd,мг/кг",
-        getter: e => e["grossContentCadmium"]
+        getter: e => e["grossContentCadmium"],
+        prop: "grossContentCadmium"
     },
     {
         name: "Валовое содеpжание Сu,мг/кг",
-        getter: e => e["grossContentCopper"]
+        getter: e => e["grossContentCopper"],
+        prop: "grossContentCopper"
     },
     {
         name: "Валовое содеpжание Zn,мг/кг",
-        getter: e => e["grossContentZink"]
+        getter: e => e["grossContentZink"],
+        prop: "grossContentZink"
     },
     {
         name: "Гамма-фон, мкp/час",
-        getter: e => e["gammaBackground"]
+        getter: e => e["gammaBackground"],
+        prop: "gammaBackground"
     },
     {
         name: "Радионуклиды Cs, ки/кв.км",
-        getter: e => e["radionuclidesCesium"]
+        getter: e => e["radionuclidesCesium"],
+        prop: "radionuclidesCesium"
     },
     {
         name: "Радионуклиды Sr, ки/кв.км",
-        getter: e => e["radionuclidesStrontium"]
+        getter: e => e["radionuclidesStrontium"],
+        prop: "radionuclidesStrontium"
     },
 ]
 
 function getUrlBase(){
-    return `/api/measurement?filter=%20examinationDateId.id%20:%20${subDropdown.value}`;
+    return `/api/measurement?filter=%20examinationDateId.id%20:%20${subDropdown.value}&sort=${sortColumn},${sortDirection}`;
 }
 
 function rebuildFromData(data) {
@@ -255,6 +304,17 @@ function rebuildTable(data) {
     for (const col of tableColumns) {
         const th = document.createElement("th");
         th.innerHTML = col.name;
+        if (col.prop === sortColumn) {
+            th.innerHTML += sortDirection === "asc" ? "&#9650;" : "&#9660;";
+            th.style.color = "blue";
+
+        }
+        th.onclick = () => {
+            const hasColChanged = sortColumn !== col.prop;
+            sortColumn = col.prop;
+            sortDirection = hasColChanged ? "asc" : (sortDirection === "asc" ? "desc" : "asc");
+            onSubDropdownChange();
+        };
         header.appendChild(th);
     }
     table.appendChild(header);
