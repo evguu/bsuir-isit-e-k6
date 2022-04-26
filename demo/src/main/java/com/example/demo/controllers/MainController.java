@@ -9,13 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/")
 public class MainController {
-    private final ExaminationDateService examinationDateService;
-
-    public MainController(ExaminationDateService examinationDateService){
-        this.examinationDateService = examinationDateService;
-    }
-
-
     @GetMapping("/")
     public String showIndexPage(Model model){
         return "index";
@@ -23,7 +16,6 @@ public class MainController {
 
     @GetMapping("/measurement_view")
     public String showMeasurementViewPage(Model model){
-        model.addAttribute("dates", examinationDateService.getAll());
         return "measurement_view";
     }
 }

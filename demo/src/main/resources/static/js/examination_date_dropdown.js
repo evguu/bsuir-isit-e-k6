@@ -1,62 +1,20 @@
-const dataSource = document.getElementById("examination-date-dropdown-data");
+const baseUrl = "/api/measurement?";
 
-const container = document.getElementById("dropdown-container");
-const mainDropdown = document.createElement("select");
-const subDropdown = document.createElement("select");
-
-let examinationDates = dataSource.getAttribute("value");
-examinationDates = examinationDates.replaceAll("=", ":");
-examinationDates = examinationDates.replaceAll("ExaminationDate(", "{");
-examinationDates = examinationDates.replaceAll(")", "}");
-eval("examinationDates = " + examinationDates); // Potential security risk!
-dataSource.remove();
-
-let sortColumn = "id";
-let sortDirection = "asc";
-
-const tourDateMap = {};
-for (examinationDate of examinationDates) {
-    if (!Object.keys(tourDateMap).includes(examinationDate.tour + "")) {
-        tourDateMap[examinationDate.tour] = [];
-    }
-    tourDateMap[examinationDate.tour].push(examinationDate);
-}
-
-
-updateDropdown(mainDropdown, Object.keys(tourDateMap));
-
-container.appendChild(mainDropdown);
-mainDropdown.onchange = onMainDropdownChange;
-onMainDropdownChange();
-
-container.appendChild(subDropdown);
-subDropdown.onchange = onSubDropdownChange;
-
-
-function updateDropdown(dropdown, data, stringifier = e => e, idGetter = e => e) {
-    dropdown.innerHTML = "";
-    for (const item of data) {
-        const option = document.createElement("option");
-        option.value = idGetter(item);
-        option.text = stringifier(item);
-        dropdown.appendChild(option);
-    }
-}
-
-function onMainDropdownChange() {
-    updateDropdown(subDropdown, tourDateMap[mainDropdown.value], e => e.examinationYear, e => e.id);
-    onSubDropdownChange();
-}
-
-function onSubDropdownChange() {
-    $.getJSON(getUrlBase() + `&page=0&limit=20`, rebuildFromData);
-}
-
-const tableColumns = [
+const entityDescription = [
     {
         name: "ID",
         getter: e => e["id"],
         prop: "id"
+    },
+    {
+        name: "Тур",
+        getter: e => e["examinationDateId"]["tour"],
+        prop: "examinationDateId.tour"
+    },
+    {
+        name: "Год",
+        getter: e => e["examinationDateId"]["examinationYear"],
+        prop: "examinationDateId.examinationYear"
     },
     {
         name: "Наименование организации",
@@ -286,12 +244,39 @@ const tableColumns = [
     },
 ]
 
-function getUrlBase(){
-    return `/api/measurement?filter=%20examinationDateId.id%20:%20${subDropdown.value}&sort=${sortColumn},${sortDirection}`;
+const viewDescription = {
+    sorts: [],
+    filters: [],
+    page: 0,
+    limit: 20,
+    reset: function(){
+        this.sorts = []; // example: [{prop: "id", dir: "asc"}]
+        this.filters = []; // example: ["examinationDate.id : 1"]
+        this.page = 0;
+        this.limit = 20;
+    },
+    composeUrl: function (){
+        let filters = this.filters.join("%20AND%20");
+        let sorts = this.sorts.map(e => "sort="+e.prop+","+e.dir).join("&");
+
+        let result = baseUrl;
+        if (sorts.length)
+            result += `&${sorts}`;
+        if (filters.length)
+            result += `&filter=${filters}`;
+
+        result += "&page="+this.page+"&limit="+this.limit;
+        console.log(result);
+        return result;
+    }
 }
 
+function reloadData() {
+    $.getJSON(viewDescription.composeUrl(), rebuildFromData);
+}
+reloadData();
+
 function rebuildFromData(data) {
-    console.log(data);
     rebuildTable(data.content);
     rebuildPageNav(data.totalPages, data.number);
 }
@@ -301,20 +286,10 @@ function rebuildTable(data) {
     table.innerHTML = "";
 
     const header = document.createElement("tr");
-    for (const col of tableColumns) {
+    for (const col of entityDescription) {
         const th = document.createElement("th");
-        th.innerHTML = col.name;
-        if (col.prop === sortColumn) {
-            th.innerHTML += sortDirection === "asc" ? "&#9650;" : "&#9660;";
-            th.style.color = "blue";
-
-        }
-        th.onclick = () => {
-            const hasColChanged = sortColumn !== col.prop;
-            sortColumn = col.prop;
-            sortDirection = hasColChanged ? "asc" : (sortDirection === "asc" ? "desc" : "asc");
-            onSubDropdownChange();
-        };
+        th.innerHTML = col.name + getSortDirChar(col.prop);
+        th.onclick = () => {onTableHeaderClick(col.prop);};
         header.appendChild(th);
     }
     table.appendChild(header);
@@ -322,7 +297,7 @@ function rebuildTable(data) {
     for (const measurement of data) {
         const row = document.createElement("tr");
         let rowHtml = "";
-        for (const col of tableColumns) {
+        for (const col of entityDescription) {
             rowHtml += `<td>${col.getter(measurement)}</td>`;
         }
         row.innerHTML = rowHtml;
@@ -330,10 +305,36 @@ function rebuildTable(data) {
     }
 }
 
+function onTableHeaderClick(prop){
+    const isPropPresentInSort = viewDescription.sorts.some(e => e.prop === prop);
+    if (isPropPresentInSort) {
+        const index = viewDescription.sorts.findIndex(e => e.prop === prop);
+        if (viewDescription.sorts[index].dir === "asc")
+            viewDescription.sorts[index].dir = "desc";
+        else
+            viewDescription.sorts.splice(index, 1);
+    } else {
+        viewDescription.sorts.push({prop: prop, dir: "asc"});
+    }
+    reloadData();
+}
+
+function getSortDirChar(prop){
+    const isPropPresentInSort = viewDescription.sorts.some(e => e.prop === prop);
+    if (isPropPresentInSort) {
+        const index = viewDescription.sorts.findIndex(e => e.prop === prop);
+        if (viewDescription.sorts[index].dir === "asc")
+            return "▲"+(index+1);
+        else
+            return "▼"+(index+1);
+    } else {
+        return "";
+    }
+}
+
 function rebuildPageNav(pageCount, pageNumber) {
     pageCount *= 1;
     pageNumber *= 1;
-    console.log(pageCount, pageNumber);
     const pageList = $("#page-nav");
     pageList.html("");
 
@@ -353,27 +354,30 @@ function rebuildPageNav(pageCount, pageNumber) {
 
     let pageStep = 1;
     while (pageCount / pageStep > 1) {
+        const plusDest = pageNumber + pageStep;
+        const isPlusButtonNecessary = (plusDest < pageCount);
 
-        const isPlusButtonNecessary = ((pageNumber + pageStep) < pageCount);
+        const minusDest = pageNumber - pageStep;
+        const isMinusButtonNecessary = (minusDest >= 0);
+
         if (isPlusButtonNecessary) {
-            const button = $("<button>");
-            button.text(`+${pageStep}`);
-            const destinationPage = pageNumber + pageStep;
-            button.click(() => $.getJSON(getUrlBase() + `&page=${destinationPage}&limit=20`,
-                rebuildFromData));
-            nextHolder.append(button);
+            nextHolder.append(addPageButton(`+${pageStep}`, plusDest));
         }
 
-        const isMinusButtonNecessary = ((pageNumber - pageStep) >= 0);
         if (isMinusButtonNecessary) {
-            const button = $("<button>");
-            button.text(`-${pageStep}`);
-            const destinationPage = pageNumber - pageStep;
-            button.click(() => $.getJSON(getUrlBase() + `&page=${destinationPage}&limit=20`,
-                rebuildFromData));
-            prevHolder.append(button);
+            prevHolder.append(addPageButton(`-${pageStep}`, minusDest));
         }
 
         pageStep *= 10;
     }
+}
+
+function addPageButton(text, page){
+    const button = $("<button>");
+    button.text(text);
+    button.click(() => {
+        viewDescription.page = page;
+        $.getJSON(viewDescription.composeUrl(), rebuildFromData);
+    });
+    return button;
 }

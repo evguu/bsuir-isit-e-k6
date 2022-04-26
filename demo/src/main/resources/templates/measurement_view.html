@@ -2,13 +2,6 @@
 <body>
 <header th:replace="common.html :: header"></header>
 <div class="main-contrainer">
-    <div id="dropdown-container">
-        Выберите дату:
-        <input
-                type="hidden"
-                id="examination-date-dropdown-data"
-                th:value="${dates}"/>
-    </div>
     <div class="auth-inner">
         <table id="measurement-table"></table>
     </div>
