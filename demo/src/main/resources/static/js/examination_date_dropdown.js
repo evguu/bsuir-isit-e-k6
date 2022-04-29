@@ -244,19 +244,22 @@ const entityDescription = [
     },
 ]
 
+const controlsContainer = $("#controls");
+
+
 const viewDescription = {
     sorts: [],
     filters: [],
     page: 0,
     limit: 20,
     reset: function(){
-        this.sorts = []; // example: [{prop: "id", dir: "asc"}]
-        this.filters = []; // example: ["examinationDate.id : 1"]
+        this.sorts = [];
+        this.filters = [];
         this.page = 0;
         this.limit = 20;
     },
     composeUrl: function (){
-        let filters = this.filters.join("%20AND%20");
+        let filters = this.filters.map(e => `${e.src.prop} ${e.op.code} ${e.val}`).join(" AND ");
         let sorts = this.sorts.map(e => "sort="+e.prop+","+e.dir).join("&");
 
         let result = baseUrl;
@@ -268,23 +271,44 @@ const viewDescription = {
         result += "&page="+this.page+"&limit="+this.limit;
         console.log(result);
         return result;
-    }
+    },
+    operations: [
+        {
+            name: "больше",
+            code: ">",
+        },
+        {
+            name: "меньше",
+            code: "<",
+        },
+        {
+            name: "равно",
+            code: ":",
+        },
+        {
+            name: "больше или равно",
+            code: ">:",
+        },
+        {
+            name: "меньше или равно",
+            code: "<:",
+        },
+        {
+            name: "не равно",
+            code: "!",
+        },
+        /*{
+            name: "содержит",
+            code: "~",
+        },*/
+    ]
 }
 
 function addLoader(){
     // Добавляем загрузочный элемент
     let loader = document.createElement("div");
     // Добавляем стили
-    loader.style.position = "absolute";
-    loader.style.top = "0";
-    loader.style.left = "0";
-    loader.style.width = "100%";
-    loader.style.height = "100%";
-    loader.style.backgroundColor = "rgba(0,0,0,0.5)";
-    loader.style.zIndex = "1000";
-    loader.style.display = "flex";
-    loader.style.alignItems = "center";
-    loader.style.justifyContent = "center";
+    loader.classList.add("loading-screen");
     loader.innerHTML = "Загрузка...";
 
     document.body.appendChild(loader);
@@ -297,8 +321,83 @@ function reloadData() {
         rebuildFromData(data);
         document.body.removeChild(loader);
     });
+
+    fillSortSearchControls();
 }
 reloadData();
+
+function utf8_to_b64( str ) {
+    return window.btoa(unescape(encodeURIComponent( str )));
+}
+
+function b64_to_utf8( str ) {
+    return decodeURIComponent(escape(window.atob( str )));
+}
+
+
+function fillSortSearchControls(){
+    // Очищаем контейнер
+    controlsContainer.empty();
+
+    const summary = document.createElement("summary");
+    summary.innerHTML = "Фильтрация";
+    controlsContainer.append(summary);
+
+    let filter = document.createElement("div");
+    filter.classList.add("filter");
+    filter.innerHTML = `
+        <select class="filter-prop">
+            ${entityDescription.map(e => `<option value="${utf8_to_b64(JSON.stringify(e))}">${e.name}</option>`).join("")}
+        </select>
+        <select class="filter-op">
+            ${viewDescription.operations.map(e => `<option value="${utf8_to_b64(JSON.stringify(e))}">${e.name}</option>`).join("")}
+        </select>
+        <input class="filter-value" type="text">
+        <button class="filter-apply">Добавить фильтр</button>
+    `;
+    filter.querySelector(".filter-apply").onclick = () => {
+        let prop = JSON.parse(b64_to_utf8(filter.querySelector(".filter-prop").value));
+        let op = JSON.parse(b64_to_utf8(filter.querySelector(".filter-op").value));
+        let value = filter.querySelector(".filter-value").value;
+        viewDescription.filters.push({src: prop,op: op, val: value});
+        reloadData();
+    }
+    controlsContainer.append(filter);
+
+    let clearAllSortButton = document.createElement("button");
+    clearAllSortButton.innerHTML = "Сбросить сортировку";
+    clearAllSortButton.onclick = () => {
+            viewDescription.sorts=[];
+            reloadData();
+        };
+    if(viewDescription.sorts.length)
+        controlsContainer.append(clearAllSortButton);
+
+    let clearAllFilterButton = document.createElement("button");
+    clearAllFilterButton.innerHTML = "Сбросить фильтры";
+    clearAllFilterButton.onclick = () => {
+            viewDescription.filters=[];
+            reloadData();
+        };
+    if(viewDescription.filters.length)
+        controlsContainer.append(clearAllFilterButton);
+
+    // Добавим список активных фильтров
+    let filters = document.createElement("div");
+    for (const filter of viewDescription.filters) {
+        let filterItem = document.createElement("div");
+        filterItem.innerHTML = `
+            <span style="color:black" class="filter-prop">Фильтр: ${filter.src.name} ${filter.op.name} ${filter.val}</span>
+            <button class="filter-remove">Удалить</button>
+        `;
+        filterItem.querySelector(".filter-remove").onclick = () => {
+            viewDescription.filters.splice(viewDescription.filters.indexOf(filter), 1);
+            reloadData();
+        };
+        filters.append(filterItem);
+    }
+    controlsContainer.append(filters);
+}
 
 function rebuildFromData(data) {
     rebuildTable(data.content);
