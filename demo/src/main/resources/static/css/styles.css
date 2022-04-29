@@ -13,6 +13,10 @@
     border: 2px solid #00eaff; /* creates padding around scroll thumb */
 }
 
+:root {
+    --color-table-bg: rgba(66, 131, 176, 0.17);;
+}
+
 table {
     border-collapse: collapse;
     color: black;
@@ -37,7 +41,7 @@ table td {
     font-size: 0.8em;
     padding-right: 5px;
 
-    background: rgba(66, 131, 176, 0.17);
+    background: var(--color-table-bg);
 }
 
 
@@ -131,6 +135,11 @@ body {
 #controls {
     transition: all 0.5s ease-in-out;
     margin-bottom: 10px;
+
+    border: 1px solid #410052;
+    border-radius: 10px;
+    background-color: var(--color-table-bg);
+    padding: 10px;
 }
 
 .loading-screen {
