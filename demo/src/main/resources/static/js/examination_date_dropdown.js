@@ -271,8 +271,32 @@ const viewDescription = {
     }
 }
 
+function addLoader(){
+    // Добавляем загрузочный элемент
+    let loader = document.createElement("div");
+    // Добавляем стили
+    loader.style.position = "absolute";
+    loader.style.top = "0";
+    loader.style.left = "0";
+    loader.style.width = "100%";
+    loader.style.height = "100%";
+    loader.style.backgroundColor = "rgba(0,0,0,0.5)";
+    loader.style.zIndex = "1000";
+    loader.style.display = "flex";
+    loader.style.alignItems = "center";
+    loader.style.justifyContent = "center";
+    loader.innerHTML = "Загрузка...";
+
+    document.body.appendChild(loader);
+    return loader;
+}
+
 function reloadData() {
-    $.getJSON(viewDescription.composeUrl(), rebuildFromData);
+    let loader = addLoader();
+    $.getJSON(viewDescription.composeUrl(), (data)=>{
+        rebuildFromData(data);
+        document.body.removeChild(loader);
+    });
 }
 reloadData();
 
@@ -376,8 +400,12 @@ function addPageButton(text, page){
     const button = $("<button>");
     button.text(text);
     button.click(() => {
+        let loader = addLoader();
         viewDescription.page = page;
-        $.getJSON(viewDescription.composeUrl(), rebuildFromData);
+        $.getJSON(viewDescription.composeUrl(), (data)=>{
+            rebuildFromData(data);
+            document.body.removeChild(loader);
+        });
     });
     return button;
 }
