@@ -339,10 +339,12 @@ function fillSortSearchControls(){
     // Очищаем контейнер
     controlsContainer.empty();
 
+    // Добавляем заголовок
     const summary = document.createElement("summary");
-    summary.innerHTML = "Фильтрация";
+    summary.innerHTML = "Управление";
     controlsContainer.append(summary);
 
+    // Создаем контейнер для фильтров
     let filter = document.createElement("div");
     filter.classList.add("filter");
     filter.innerHTML = `
@@ -364,6 +366,15 @@ function fillSortSearchControls(){
     }
     controlsContainer.append(filter);
 
+    // Кнопка открытия ссылки из API
+    const openApiLink = document.createElement("button");
+    openApiLink.innerHTML = "Открыть страницу в API";
+    openApiLink.onclick = ()=>{
+        window.open(viewDescription.composeUrl());
+    }
+    controlsContainer.append(openApiLink);
+
+    // Кнопка очистки фильтров
     let clearAllSortButton = document.createElement("button");
     clearAllSortButton.innerHTML = "Сбросить сортировку";
     clearAllSortButton.onclick = () => {
@@ -373,6 +384,7 @@ function fillSortSearchControls(){
     if(viewDescription.sorts.length)
         controlsContainer.append(clearAllSortButton);
 
+    // Кнопка очистки фильтров
     let clearAllFilterButton = document.createElement("button");
     clearAllFilterButton.innerHTML = "Сбросить фильтры";
     clearAllFilterButton.onclick = () => {
