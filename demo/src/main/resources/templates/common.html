@@ -3,10 +3,10 @@
 <head th:fragment="head">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Измерения</title>
-    <link rel="stylesheet" href="css/bootstrap_min.css"/>
-    <link rel="stylesheet" href="css/styles.css"/>
-    <script src="js/jquery_360_min.js"></script>
-    <script src="js/bootstrap_min.js"></script>
+    <link rel="stylesheet" href="/css/bootstrap_min.css"/>
+    <link rel="stylesheet" href="/css/styles.css"/>
+    <script src="/js/jquery_360_min.js"></script>
+    <script src="/js/bootstrap_min.js"></script>
 
 </head>
 
@@ -35,6 +35,9 @@
                         </li>
                         <li class="nav-item">
                             <a th:href="@{/}" class="nav-link">Формы</a>
+                        </li>
+                        <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                            <a th:href="@{/admin}" class="nav-link">Админ-панель</a>
                         </li>
                         <li class="nav-item">
                             <a th:href="@{/api/measurement}" class="nav-link">API</a>

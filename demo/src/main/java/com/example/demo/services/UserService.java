@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -23,6 +24,10 @@ public class UserService {
     @Autowired
     private RoleService roleService;
 
+    public User findById(Integer id) {
+        return userRepository.findById(id).orElse(null);
+    }
+
     public User registerNewUserAccount(UserDto userDto) throws UserAlreadyExistException {
         if (usernameExists(userDto.getUsername())) {
             throw new UserAlreadyExistException("Это имя пользователя уже занято: "
@@ -36,6 +41,30 @@ public class UserService {
         user.setEnabled(false);
 
         return userRepository.save(user);
+    }
+
+    public List<User> findUnactivatedUsers(){
+        return userRepository.findByEnabledFalse();
+    }
+
+    public void activateUser(User user){
+        user.setEnabled(true);
+        userRepository.save(user);
+    }
+
+    public void deactivateUser(User user) {
+        user.setEnabled(false);
+        userRepository.save(user);
+    }
+
+    public void grantRoleToUser(User user, String roleName) {
+        user.getRoles().add(roleService.findByName(roleName));
+        userRepository.save(user);
+    }
+
+    public void revokeRoleFromUser(User user, String roleName) {
+        user.getRoles().remove(roleService.findByName(roleName));
+        userRepository.save(user);
     }
 
     private boolean usernameExists(String username) {

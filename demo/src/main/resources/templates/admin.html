@@ -1,0 +1,19 @@
+<head th:replace="common.html :: head"/>
+<body>
+<header th:replace="common.html :: header"></header>
+<div class="auth-inner">
+    <div>
+        <h3>Страница администратора</h3>
+
+        <p>Неактивированные пользователи:</p>
+        <div th:each="user : ${unactivatedUsers}">
+            <form th:action="'/admin/activate/' + ${user.id}" method="post">
+
+                <span th:text="'Логин: ' + ${user.username}">
+                </span>
+                <input type="submit" value="Активировать"/>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
