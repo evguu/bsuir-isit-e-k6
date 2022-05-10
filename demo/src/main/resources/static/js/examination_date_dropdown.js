@@ -1,66 +1,9 @@
-const baseUrl = "/api/measurement?";
-
 import {entityDescription} from "./entity_descriptions/measurement.js";
 
 const controlsContainer = $("#controls");
 
-
-const viewDescription = {
-    sorts: [],
-    filters: [],
-    page: 0,
-    limit: 20,
-    reset: function(){
-        this.sorts = [];
-        this.filters = [];
-        this.page = 0;
-        this.limit = 20;
-    },
-    composeUrl: function (){
-        let filters = this.filters.map(e => `${e.src.prop} ${e.op.code} ${e.val}`).join(" AND ");
-        let sorts = this.sorts.map(e => "sort="+e.prop+","+e.dir).join("&");
-
-        let result = baseUrl;
-        if (sorts.length)
-            result += `&${sorts}`;
-        if (filters.length)
-            result += `&filter=${filters}`;
-
-        result += "&page="+this.page+"&limit="+this.limit;
-        console.log(result);
-        return result;
-    },
-    operations: [
-        {
-            name: "больше",
-            code: ">",
-        },
-        {
-            name: "меньше",
-            code: "<",
-        },
-        {
-            name: "равно",
-            code: ":",
-        },
-        {
-            name: "больше или равно",
-            code: ">:",
-        },
-        {
-            name: "меньше или равно",
-            code: "<:",
-        },
-        {
-            name: "не равно",
-            code: "!",
-        },
-        /*{
-            name: "содержит",
-            code: "~",
-        },*/
-    ]
-}
+import {ViewManager} from "./viewManager.js";
+const viewDescription = new ViewManager("/api/measurement?");
 
 function addLoader(){
     // Добавляем загрузочный элемент
@@ -110,7 +53,7 @@ function fillSortSearchControls(){
             ${entityDescription.map(e => `<option value="${utf8_to_b64(JSON.stringify(e))}">${e.name}</option>`).join("")}
         </select>
         <select class="filter-op">
-            ${viewDescription.operations.map(e => `<option value="${utf8_to_b64(JSON.stringify(e))}">${e.name}</option>`).join("")}
+            ${ViewManager.operations.map(e => `<option value="${utf8_to_b64(JSON.stringify(e))}">${e.name}</option>`).join("")}
         </select>
         <input class="filter-value" type="text">
         <button class="filter-apply">Добавить фильтр</button>
