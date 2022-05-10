@@ -1,40 +1,23 @@
 import {entityDescription} from "./entity_descriptions/measurement.js";
+import {ViewManager} from "./viewManager.js";
+import {LoaderElement} from "./loaderElement.js";
 
 const controlsContainer = $("#controls");
-
-import {ViewManager} from "./viewManager.js";
+const loader = new LoaderElement();
 const viewDescription = new ViewManager("/api/measurement?");
 
-function addLoader(){
-    // Добавляем загрузочный элемент
-    let loader = document.createElement("div");
-    // Добавляем стили
-    loader.classList.add("loading-screen");
-    loader.innerHTML = "Загрузка...";
-
-    document.body.appendChild(loader);
-    return loader;
-}
-
 function reloadData() {
-    let loader = addLoader();
+    loader.show();
     $.getJSON(viewDescription.composeUrl(), (data)=>{
         rebuildFromData(data);
-        document.body.removeChild(loader);
+        loader.hide();
     });
 
     fillSortSearchControls();
 }
+
+// Reload data on page load
 reloadData();
-
-function utf8_to_b64( str ) {
-    return window.btoa(unescape(encodeURIComponent( str )));
-}
-
-function b64_to_utf8( str ) {
-    return decodeURIComponent(escape(window.atob( str )));
-}
-
 
 function fillSortSearchControls(){
     // Очищаем контейнер
@@ -50,18 +33,18 @@ function fillSortSearchControls(){
     filter.classList.add("filter");
     filter.innerHTML = `
         <select class="filter-prop">
-            ${entityDescription.map(e => `<option value="${utf8_to_b64(JSON.stringify(e))}">${e.name}</option>`).join("")}
+            ${entityDescription.map((e,i) => `<option value="${i}">${e.name}</option>`).join("")}
         </select>
         <select class="filter-op">
-            ${ViewManager.operations.map(e => `<option value="${utf8_to_b64(JSON.stringify(e))}">${e.name}</option>`).join("")}
+            ${ViewManager.operations.map((e,i) => `<option value="${i}">${e.name}</option>`).join("")}
         </select>
         <input class="filter-value" type="text">
         <button class="filter-apply">Добавить фильтр</button>
     `;
     filter.querySelector(".filter-apply").onclick = () => {
-        let prop = JSON.parse(b64_to_utf8(filter.querySelector(".filter-prop").value));
-        let op = JSON.parse(b64_to_utf8(filter.querySelector(".filter-op").value));
-        let value = filter.querySelector(".filter-value").value;
+        const prop = entityDescription[filter.querySelector(".filter-prop").value];
+        const op = ViewManager.operations[filter.querySelector(".filter-op").value];
+        const value = filter.querySelector(".filter-value").value;
         viewDescription.filters.push({src: prop,op: op, val: value});
         reloadData();
     }
@@ -75,7 +58,7 @@ function fillSortSearchControls(){
     }
     controlsContainer.append(openApiLink);
 
-    // Кнопка очистки фильтров
+    // Кнопка очистки сортировок
     let clearAllSortButton = document.createElement("button");
     clearAllSortButton.innerHTML = "Сбросить сортировку";
     clearAllSortButton.onclick = () => {
@@ -124,8 +107,8 @@ function rebuildTable(data) {
     const header = document.createElement("tr");
     for (const col of entityDescription) {
         const th = document.createElement("th");
-        th.innerHTML = col.name + getSortDirChar(col.prop);
-        th.onclick = () => {onTableHeaderClick(col.prop);};
+        th.innerHTML = col.name + getCharacterToDisplaySortingDirection(col.prop);
+        th.onclick = () => {onColumnNameClick(col.prop);};
         header.appendChild(th);
     }
     table.appendChild(header);
@@ -141,24 +124,27 @@ function rebuildTable(data) {
     }
 }
 
-function onTableHeaderClick(prop){
-    const isPropPresentInSort = viewDescription.sorts.some(e => e.prop === prop);
-    if (isPropPresentInSort) {
-        const index = viewDescription.sorts.findIndex(e => e.prop === prop);
-        if (viewDescription.sorts[index].dir === "asc")
+function onColumnNameClick(prop){
+    const index = viewDescription.sorts.findIndex(e => e.prop === prop);
+
+    // Alter the sort direction between ascending, descending and none.
+    if (index !== -1) {
+        if (viewDescription.sorts[index].dir === "asc") {
             viewDescription.sorts[index].dir = "desc";
-        else
+        }
+        else {
             viewDescription.sorts.splice(index, 1);
+        }
     } else {
         viewDescription.sorts.push({prop: prop, dir: "asc"});
     }
+
     reloadData();
 }
 
-function getSortDirChar(prop){
-    const isPropPresentInSort = viewDescription.sorts.some(e => e.prop === prop);
-    if (isPropPresentInSort) {
-        const index = viewDescription.sorts.findIndex(e => e.prop === prop);
+function getCharacterToDisplaySortingDirection(prop){
+    const index = viewDescription.sorts.findIndex(e => e.prop === prop);
+    if (index !== -1) {
         if (viewDescription.sorts[index].dir === "asc")
             return "▲"+(index+1);
         else
@@ -197,26 +183,26 @@ function rebuildPageNav(pageCount, pageNumber) {
         const isMinusButtonNecessary = (minusDest >= 0);
 
         if (isPlusButtonNecessary) {
-            nextHolder.append(addPageButton(`+${pageStep}`, plusDest));
+            nextHolder.append(addPageChangeButton(`+${pageStep}`, plusDest));
         }
 
         if (isMinusButtonNecessary) {
-            prevHolder.append(addPageButton(`-${pageStep}`, minusDest));
+            prevHolder.append(addPageChangeButton(`-${pageStep}`, minusDest));
         }
 
         pageStep *= 10;
     }
 }
 
-function addPageButton(text, page){
+function addPageChangeButton(text, destinationPage){
     const button = $("<button>");
     button.text(text);
     button.click(() => {
-        let loader = addLoader();
-        viewDescription.page = page;
+        loader.show()
+        viewDescription.page = destinationPage;
         $.getJSON(viewDescription.composeUrl(), (data)=>{
             rebuildFromData(data);
-            document.body.removeChild(loader);
+            loader.hide();
         });
     });
     return button;

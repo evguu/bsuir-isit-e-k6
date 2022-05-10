@@ -1,4 +1,6 @@
 export class ViewManager {
+    // If this changes at runtime, we're doomed
+    // TODO: freeze this
     static operations = [
         {
             name: "больше",
