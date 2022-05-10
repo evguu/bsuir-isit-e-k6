@@ -38,8 +38,17 @@ export class ViewManager {
         this.limit = 20;
     }
 
+    static zeroInstance = new ViewManager();
+
+    cloneInto(into) {
+        into.sorts = [...this.sorts];
+        into.filters = [...this.filters];
+        into.page = this.page;
+        into.limit = this.limit;
+    }
+
     reset() {
-        this.constructor();
+        ViewManager.zeroInstance.cloneInto(this);
     }
 
     composeUrl(getAll = false){
