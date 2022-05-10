@@ -28,7 +28,10 @@
 
                     <ul class="navbar-nav ml-auto" sec:authorize="isAuthenticated()">
                         <li class="nav-item">
-                            <a th:href="@{/measurement_view}" class="nav-link">Измерения</a>
+                            <a th:href="@{/entity_view?entity=measurement}" class="nav-link">Измерения</a>
+                        </li>
+                        <li class="nav-item">
+                            <a th:href="@{/entity_view?entity=organization}" class="nav-link">Организации</a>
                         </li>
                         <li class="nav-item">
                             <a th:href="@{/}" class="nav-link">Формы</a>

@@ -1,6 +1,5 @@
 package com.example.demo.controllers;
 
-import com.example.demo.services.ExaminationDateService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,8 +13,13 @@ public class MainController {
         return "index";
     }
 
-    @GetMapping("/measurement_view")
+    @GetMapping("/entity_view")
     public String showMeasurementViewPage(Model model){
-        return "measurement_view";
+        return "entity_view";
+    }
+
+    @GetMapping("/403")
+    public String accessDeniedPage(Model model){
+        return "403";
     }
 }

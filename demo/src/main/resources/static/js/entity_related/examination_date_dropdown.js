@@ -1,11 +1,16 @@
-import {entityDescription} from "./entity_descriptions/measurement.js";
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const chosenEntity = urlParams.get('entity');
+
+const entityDescription = (await import(`./entity_descriptions/${chosenEntity}.js`)).entityDescription;
+console.log(entityDescription);
 import {ViewManager} from "./viewManager.js";
 import {LoaderElement} from "./loaderElement.js";
 import {CsvUtils} from "./csvUtils.js";
 
 const controlsContainer = $("#controls");
 const loader = new LoaderElement();
-const viewDescription = new ViewManager("/api/measurement?");
+const viewDescription = new ViewManager(`/api/${chosenEntity}?`);
 
 function reloadData() {
     loader.show();
