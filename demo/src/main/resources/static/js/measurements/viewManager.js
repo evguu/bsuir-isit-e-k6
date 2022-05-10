@@ -42,7 +42,7 @@ export class ViewManager {
         this.constructor();
     }
 
-    composeUrl(){
+    composeUrl(getAll = false){
         // String filters require to be enclosed in quotes
         // Number filters don't need to be enclosed in quotes
 
@@ -58,7 +58,12 @@ export class ViewManager {
         if (filters.length)
             result += `&filter=${filters}`;
 
-        result += "&page="+this.page+"&limit="+this.limit;
+        if (!getAll) {
+            result += "&page=" + this.page + "&size=" + this.limit;
+        }
+        else {
+            result += "&page=0&size=100000";
+        }
         console.log(result);
         return result;
     }

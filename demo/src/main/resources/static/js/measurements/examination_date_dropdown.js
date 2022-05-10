@@ -1,6 +1,7 @@
 import {entityDescription} from "./entity_descriptions/measurement.js";
 import {ViewManager} from "./viewManager.js";
 import {LoaderElement} from "./loaderElement.js";
+import {CsvUtils} from "./csvUtils.js";
 
 const controlsContainer = $("#controls");
 const loader = new LoaderElement();
@@ -8,11 +9,11 @@ const viewDescription = new ViewManager("/api/measurement?");
 
 function reloadData() {
     loader.show();
+    viewDescription.page=0;
     $.getJSON(viewDescription.composeUrl(), (data)=>{
         rebuildFromData(data);
         loader.hide();
     });
-
     fillSortSearchControls();
 }
 
@@ -57,6 +58,16 @@ function fillSortSearchControls(){
         window.open(viewDescription.composeUrl());
     }
     controlsContainer.append(openApiLink);
+
+    // Кнопка скачивания отчета в CSV
+    const downloadCsvButton = document.createElement("button");
+    downloadCsvButton.innerHTML = "Скачать Excel-отчет";
+    downloadCsvButton.onclick = ()=>{
+        CsvUtils.downloadAsXlsx(viewDescription.composeUrl(true),
+            entityDescription,
+            loader);
+    }
+    controlsContainer.append(downloadCsvButton);
 
     // Кнопка очистки сортировок
     let clearAllSortButton = document.createElement("button");
