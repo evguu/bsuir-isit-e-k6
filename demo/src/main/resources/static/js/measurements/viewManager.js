@@ -1,37 +1,34 @@
 export class ViewManager {
-    // If this changes at runtime, we're doomed
-    // TODO: freeze this
     static operations = [
         {
             name: "больше",
-            code: ">",
+            applier: (p, v) => `${p.prop} > ${enquote(p,v)}`,
         },
         {
             name: "меньше",
-            code: "<",
+            applier: (p, v) => `${p.prop} < ${enquote(p,v)}`,
         },
         {
             name: "равно",
-            code: ":",
+            applier: (p, v) => `${p.prop} : ${enquote(p,v)}`,
         },
         {
             name: "больше или равно",
-            code: ">:",
+            applier: (p, v) => `${p.prop} >: ${enquote(p,v)}`,
         },
         {
             name: "меньше или равно",
-            code: "<:",
+            applier: (p, v) => `${p.prop} <: ${enquote(p,v)}`,
         },
         {
             name: "не равно",
-            code: "!",
+            applier: (p, v) => `${p.prop} ! ${enquote(p,v)}`,
         },
-        /*{
+        {
             name: "содержит",
-            code: "~",
-        },*/
+            applier: (p, v) => `${p.prop} ~ ${enquote(p,"%"+ v + "%")}`,
+        },
     ];
-
 
     constructor(baseUrl) {
         this.baseUrl = baseUrl;
@@ -46,7 +43,12 @@ export class ViewManager {
     }
 
     composeUrl(){
-        let filters = this.filters.map(e => `${e.src.prop} ${e.op.code} ${e.val}`).join(" AND ");
+        // String filters require to be enclosed in quotes
+        // Number filters don't need to be enclosed in quotes
+
+        let filters = this.filters
+            .map(e => encodeURIComponent(e.op.applier(e.src, e.val)))
+            .join(" AND ");
 
         let sorts = this.sorts.map(e => "sort="+e.prop+","+e.dir).join("&");
 
@@ -60,4 +62,10 @@ export class ViewManager {
         console.log(result);
         return result;
     }
+}
+
+Object.freeze(ViewManager.operations);
+
+function enquote(columnDescription, value) {
+    return columnDescription.type === "string" ? `'${value}'` : value;
 }
