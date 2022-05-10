@@ -1,15 +1,20 @@
 <head th:replace="common.html :: head"/>
 <body>
     <header th:replace="common.html :: header"></header>
-    <p>Регистрация</p>
+    <div class="auth-inner">
+        <form action="#" th:action="@{/register}" th:object="${user}" method="post">
+            <h3>Регистрация</h3>
+            <p th:each="err : ${errors}" th:text="${err.getDefaultMessage()}"></p>
 
-    <form action="#" th:action="@{/register}" th:object="${user}" method="post">
+            <div><label> Логин : <input type="text" th:field="*{username}" placeholder="Логин"> </label></div>
+            <div><label> Пароль : <input type="password" th:field="*{password}" placeholder="Пароль"> </label></div>
+            <div><label> Повторите пароль : <input type="password" th:field="*{matchingPassword}" placeholder="Повторите пароль"> </label></div>
 
-        <p th:each="err : ${errors}" th:text="${err.getDefaultMessage()}"></p>
-
-        <input type="text" th:field="*{username}" placeholder="Логин">
-        <input type="password" th:field="*{password}" placeholder="Пароль">
-        <input type="password" placeholder="Повторите пароль" th:field="*{matchingPassword}">
-        <input type="submit" value="Зарегистрироваться"/>
-    </form>
+            <input type="submit" value="Зарегистрироваться" class="btn-primary"/>
+            <br/>
+            <span>
+                В случае успешной регистрации ваш аккаунт будет создан, но войти в него будет невозможно до активации администратором.
+            </span>
+        </form>
+    </div>
 </body>
