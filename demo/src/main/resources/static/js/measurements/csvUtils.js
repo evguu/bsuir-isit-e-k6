@@ -7,9 +7,15 @@ export class CsvUtils {
   static downloadAsXlsx(url, entityDescription, loader) {
       loader.show();
       $.getJSON(url, (data)=>{
-          const page = [entityDescription.map(col => col.name)].concat(
-                data.content.map(row => entityDescription.map(col => col.getter(row)))
-              );
+          const page = new Array(data.content.length + 1);
+          page[0] = entityDescription.map(col => col.name);
+          for (let i = 0; i < data.content.length; i++) {
+            page[i + 1] = new Array(entityDescription.length);
+            for (let j = 0; j < entityDescription.length; j++) {
+              page[i + 1][j] = entityDescription[j].getter(data.content[i]);
+            }
+          }
+
           const wb = XLSX.utils.book_new();
           const ws = XLSX.utils.aoa_to_sheet(page);
           XLSX.utils.book_append_sheet(wb, ws, "Page 1");
