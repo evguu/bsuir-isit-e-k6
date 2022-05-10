@@ -33,7 +33,7 @@ public class UserService {
         user.setUsername(userDto.getUsername());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setRoles(Set.of(roleService.findByName("USER")));
-        user.setEnabled(true); // TODO: Потом убрать, админ должен сам включать пользователя
+        user.setEnabled(false);
 
         return userRepository.save(user);
     }
