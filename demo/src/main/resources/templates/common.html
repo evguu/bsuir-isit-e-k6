@@ -36,7 +36,8 @@
                         <li class="nav-item">
                             <a th:href="@{/}" class="nav-link">Формы</a>
                         </li>
-                        <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                        <!-- https://stackoverflow.com/questions/30788105/spring-security-hasrole-not-working -->
+                        <li class="nav-item" sec:authorize="hasAuthority ('ADMIN')">
                             <a th:href="@{/admin}" class="nav-link">Админ-панель</a>
                         </li>
                         <li class="nav-item">
