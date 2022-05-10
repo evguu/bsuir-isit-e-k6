@@ -47,12 +47,19 @@ public class UserService {
         return userRepository.findByEnabledFalse();
     }
 
+    public List<User> findActivatedUsers(){
+        return userRepository.findByEnabledTrue();
+    }
+
     public void activateUser(User user){
         user.setEnabled(true);
         userRepository.save(user);
     }
 
     public void deactivateUser(User user) {
+        if (user.getRoles().contains(roleService.findByName("ADMIN"))) {
+            return;
+        }
         user.setEnabled(false);
         userRepository.save(user);
     }

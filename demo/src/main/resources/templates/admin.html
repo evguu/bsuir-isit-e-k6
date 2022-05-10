@@ -14,6 +14,15 @@
                 <input type="submit" value="Активировать"/>
             </form>
         </div>
+        <p>Активированные пользователи:</p>
+        <div th:each="user : ${activatedUsers}">
+            <form th:action="'/admin/deactivate/' + ${user.id}" method="post">
+
+                <span th:text="'Логин: ' + ${user.username}">
+                </span>
+                <input type="submit" value="Деактивировать"/>
+            </form>
+        </div>
     </div>
 </div>
 </body>

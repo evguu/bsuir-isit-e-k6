@@ -18,12 +18,19 @@ public class AdminController {
     @GetMapping("")
     public String adminPage(Model model) {
         model.addAttribute("unactivatedUsers", userService.findUnactivatedUsers());
+        model.addAttribute("activatedUsers", userService.findActivatedUsers());
         return "admin";
     }
 
     @PostMapping("/activate/{id}")
     public String activate(@PathVariable("id") Integer userId) {
         userService.activateUser(userService.findById(userId));
+        return "redirect:/admin";
+    }
+
+    @PostMapping("/deactivate/{id}")
+    public String deactivate(@PathVariable("id") Integer userId) {
+        userService.deactivateUser(userService.findById(userId));
         return "redirect:/admin";
     }
 
