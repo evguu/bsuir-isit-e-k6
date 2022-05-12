@@ -1,10 +1,13 @@
 package com.example.demo.services;
 
+import com.example.demo.CurrentUserGetter;
 import com.example.demo.dto.UserDto;
 import com.example.demo.exceptions.UserAlreadyExistException;
 import com.example.demo.models.User;
 import com.example.demo.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CurrencyEditor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -57,7 +60,8 @@ public class UserService {
     }
 
     public void deactivateUser(User user) {
-        if (user.getRoles().contains(roleService.findByName("ADMIN"))) {
+        System.out.println(CurrentUserGetter.getCurrentUsername());
+        if(CurrentUserGetter.getCurrentUsername().equals(user.getUsername())){
             return;
         }
         user.setEnabled(false);

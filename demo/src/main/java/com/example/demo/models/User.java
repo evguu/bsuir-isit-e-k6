@@ -27,4 +27,8 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles = new HashSet<>();
+
+    public boolean hasRole(String role) {
+        return roles.stream().anyMatch(r -> r.getName().equals(role));
+    }
 }

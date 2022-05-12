@@ -34,4 +34,16 @@ public class AdminController {
         return "redirect:/admin";
     }
 
+    @PostMapping("/role/grant/{id}/{role}")
+    public String grantRole(@PathVariable("id") Integer userId, @PathVariable("role") String role) {
+        userService.grantRoleToUser(userService.findById(userId), role);
+        return "redirect:/admin";
+    }
+
+    @PostMapping("/role/revoke/{id}/{role}")
+    public String revokeRole(@PathVariable("id") Integer userId, @PathVariable("role") String role) {
+        userService.revokeRoleFromUser(userService.findById(userId), role);
+        return "redirect:/admin";
+    }
+
 }

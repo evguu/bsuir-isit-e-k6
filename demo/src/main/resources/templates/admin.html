@@ -7,12 +7,24 @@
 
         <p>Неактивированные пользователи:</p>
         <div th:each="user : ${unactivatedUsers}">
-            <form th:action="'/admin/activate/' + ${user.id}" method="post">
-
-                <span th:text="'Логин: ' + ${user.username}">
-                </span>
-                <input type="submit" value="Активировать"/>
-            </form>
+            <span th:text="'Логин: ' + ${user.username}"></span>
+            <div style="display: flex; flex-direction: row;">
+                <form th:action="'/admin/activate/' + ${user.id}" method="post">
+                    <input type="submit" value="Активировать"/>
+                </form>
+                <form th:action="'/admin/role/grant/' + ${user.id} + '/CREATOR'" th:if="${!user.hasRole('CREATOR')}" method="post">
+                    <input type="submit" value="Выдать роль редактора">
+                </form>
+                <form th:action="'/admin/role/revoke/' + ${user.id} + '/CREATOR'" th:if="${user.hasRole('CREATOR')}" method="post">
+                    <input type="submit" value="Снять роль редактора">
+                </form>
+                <form th:action="'/admin/role/grant/' + ${user.id} + '/ADMIN'" th:if="${!user.hasRole('ADMIN')}" method="post">
+                    <input type="submit" value="Выдать роль администратора">
+                </form>
+                <form th:action="'/admin/role/revoke/' + ${user.id} + '/ADMIN'" th:if="${user.hasRole('ADMIN')}" method="post">
+                    <input type="submit" value="Снять роль администратора">
+                </form>
+            </div>
         </div>
         <p>Активированные пользователи:</p>
         <div th:each="user : ${activatedUsers}">
