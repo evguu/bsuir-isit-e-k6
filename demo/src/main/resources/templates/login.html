@@ -1,0 +1,15 @@
+<head th:replace="common.html :: head"/>
+<body>
+<header th:replace="common.html :: header"></header>
+<div class="auth-inner">
+    <form action="#" th:action="@{/login}" method="post">
+        <h3>Вход в систему</h3>
+        <div th:if="${param.error}" class="alert alert-danger">
+            Неверный логин или пароль, или аккаунт деактивирован.
+        </div>
+        <div><label> Логин : <input type="text" placeholder="Логин" name="username"> </label></div>
+        <div><label> Пароль : <input type="password"  placeholder="Пароль" name="password"> </label></div>
+        <input type="submit" value="Войти" class="btn-primary"/>
+    </form>
+</div>
+</body>

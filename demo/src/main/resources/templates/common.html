@@ -44,7 +44,10 @@
                             <a th:href="@{/api/measurement}" class="nav-link">API</a>
                         </li>
                         <li class="nav-item">
-                            <a th:href="@{/logout}" class="nav-link">Выход</a>
+                            <form th:action="@{/logout}" method="post">
+                                <input type="submit" class="btn btn-link nav-link" style="padding:0;margin:0;transform:translateY(30%);" value="Выход"/>
+                            </form>
+                            <!--a th:href="@{/logout}" class="nav-link">Выход</a-->
                         </li>
                     </ul>
                 </div>

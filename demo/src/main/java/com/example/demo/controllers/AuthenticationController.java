@@ -43,4 +43,9 @@ public class AuthenticationController {
         }
         return "redirect:/login";
     }
+
+    @GetMapping("/login")
+    public String showLoginForm(Model model) {
+        return "login";
+    }
 }
